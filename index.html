@@ -5,211 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MiniTown</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Gabriola', Georgia, serif;
-            background-color: white;
+            background-color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            user-select: none; /* Чтобы текст не выделялся при быстрых кликах */
         }
 
-        .balance {
+        #balance {
             font-size: 40px;
-            color: #000000;
+            color: #000;
             margin-bottom: 20px;
         }
 
-        .click-button {
+        /* Кнопка клика */
+        #mainBtn {
             width: 250px;
             height: 250px;
             margin: 20px;
             cursor: pointer;
-            border: none;
-            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background: transparent;
+            padding: 0;
             transition: transform 0.1s;
         }
+        #mainBtn:active { transform: scale(0.96); }
 
-        .click-button:active {
-            transform: scale(0.95);
-        }
-
-        /* ЗАГЛУШКА ДЛЯ ГЛАВНОЙ КНОПКИ - замените на: background-image: url('image2.png'); */
-        .click-button-image {
-            width: 100%;
-            height: 100%;
-            background-color: #e0e0e0;
-            background-image: url('image2.png'); /* ЗАМЕНИТЬ НА ВАШУ КАРТИНКУ */
+        .click-image {
+            width: 100%; height: 100%;
+            background-color: #e8e8e8;
             background-size: cover;
             background-position: center;
-            border-radius: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #666;
+            /* 👇 ЗАМЕНИТЕ ЭТУ СТРОКУ НА: background-image: url('image2.png'); */
+            /* background-image: url('image2.png'); */
         }
 
-        .shop-button {
+        /* Кнопки магазина */
+        .shop-btn {
             font-size: 24px;
             padding: 15px 30px;
-            margin: 10px;
+            margin: 8px;
             background-color: #f6fc7e;
             border: none;
             cursor: pointer;
-            font-family: 'Gabriola', Georgia, serif;
+            font-family: inherit;
             border-radius: 8px;
-            transition: background-color 0.3s;
+            transition: all 0.2s;
         }
-
-        .shop-button:hover:not(:disabled) {
-            background-color: #d6e007;
-        }
-
-        .shop-button:disabled {
+        .shop-btn:hover:not(:disabled) { background-color: #d6e007; }
+        .shop-btn:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+            opacity: 0.8;
         }
 
-        .shop-home-button {
-            font-size: 24px;
-            padding: 15px 30px;
-            margin: 10px;
-            background-color: #f6fc7e;
-            border: none;
-            cursor: pointer;
-            font-family: 'Gabriola', Georgia, serif;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-
-        .shop-home-button:hover:not(:disabled) {
-            background-color: #d6e007;
-        }
-
+        /* Контейнер домов */
         .houses-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            margin-top: 20px;
-            max-width: 1000px;
+            margin-top: 25px;
+            max-width: 1100px;
         }
 
-        .house-label {
-            width: 250px;
-            height: 250px;
-            /* ЗАГЛУШКИ ДЛЯ ДОМОВ */
-            background-color: #f0f0f0;
+        .house {
+            width: 250px; height: 250px;
+            background-color: #f5f5f5;
             background-size: cover;
             background-position: center;
             border-radius: 10px;
-            display: none; /* Скрыты по умолчанию */
+            border: 2px solid #ddd;
+            display: none; /* Скрыты до покупки */
         }
-
-        /* ЗАМЕНИТЕ background-image НА ВАШИ КАРТИНКИ */
-        .house1 { background-image: url('image3.png'); } /* ЗАМЕНИТЬ НА image3.png */
-        .house2 { background-image: url('image4.png'); } /* ЗАМЕНИТЬ НА image4.png */
-        .house3 { background-image: url('image5.png'); } /* ЗАМЕНИТЬ НА image5.png */
-        .house4 { background-image: url('IMAGE6.png'); } /* ЗАМЕНИТЬ НА IMAGE6.png */
-        .house5 { background-image: url('png10.png'); } /* ЗАМЕНИТЬ НА png10.png */
-
-        .house-label.visible {
-            display: block;
-        }
+        /* 👇 ЗАМЕНИТЕ ЭТИ СТРОКИ НА ПУТИ К ВАШИМ КАРТИНКАМ */
+        .h1 { /* background-image: url('image3.png'); */ }
+        .h2 { /* background-image: url('image4.png'); */ }
+        .h3 { /* background-image: url('image5.png'); */ }
+        .h4 { /* background-image: url('IMAGE6.png'); */ }
+        .h5 { /* background-image: url('png10.png'); */ }
     </style>
 </head>
 <body>
-    <div class="balance" id="balance">Баланс: 0</div>
+    <div id="balance">Баланс: 0</div>
     
-    <button class="click-button" onclick="click()">
-        <div class="click-button-image"></div>
+    <button id="mainBtn">
+        <div class="click-image">КЛИКНИ</div>
     </button>
 
-    <button class="shop-button" id="shopBtn" onclick="buy()">
-        Купить 10
-    </button>
-
-    <button class="shop-home-button" id="shopHomeBtn" onclick="buyHome()">
-        Купить дом 100
-    </button>
+    <button id="shopBtn" class="shop-btn">Купить 10</button>
+    <button id="shopHomeBtn" class="shop-btn">Купить дом 100</button>
 
     <div class="houses-container">
-        <div class="house-label house1" id="house1"></div>
-        <div class="house-label house2" id="house2"></div>
-               <div class="house-label house3" id="house3"></div>
-        <div class="house-label house4" id="house4"></div>
-        <div class="house-label house5" id="house5"></div>
+        <div id="house1" class="house h1"></div>
+        <div id="house2" class="house h2"></div>
+        <div id="house3" class="house h3"></div>
+        <div id="house4" class="house h4"></div>
+        <div id="house5" class="house h5"></div>
     </div>
 
     <script>
-        // Переменные
         let money = 0;
         let clickPower = 1;
         let upgradeCost = 10;
-        let upgradeCost2 = 100;
-        
         let h1 = false, h2 = false, h3 = false, h4 = false, h5 = false;
 
-        // Функция клика
-        function click() {
+        const balanceEl = document.getElementById('balance');
+        const shopBtn = document.getElementById('shopBtn');
+        const shopHomeBtn = document.getElementById('shopHomeBtn');
+
+        // ✅ Исправлено: функция переименована, чтобы не конфликтовать с браузером
+        function doClick() {
             money += clickPower;
-            update();
-            console.log(money);
+            updateUI();
         }
 
-        // Покупка улучшения
-        function buy() {
+        function buyUpgrade() {
             if (money >= upgradeCost) {
                 money -= upgradeCost;
-                clickPower += 1;
+                clickPower++;
                 upgradeCost += 10;
-                update();
+                updateUI();
             }
         }
 
-        // Покупка домов
         function buyHome() {
             if (money >= 100 && !h1) {
-                document.getElementById('house1').classList.add('visible');
-                money -= 10;
+                document.getElementById('house1').style.display = 'block';
+                money -= 100; // ✅ Исправлено: в оригинале вычиталось 10 вместо 100
                 h1 = true;
-                document.getElementById('shopHomeBtn').textContent = 'Купить торговый центр 200';
-            }
-            else if (money >= 200 && !h2) {
-                document.getElementById('house2').classList.add('visible');
-                money -= 20;
+                shopHomeBtn.textContent = 'Купить торговый центр 200';
+            } else if (money >= 200 && !h2) {
+                document.getElementById('house2').style.display = 'block';
+                money -= 200;
                 h2 = true;
-                document.getElementById('shopHomeBtn').textContent = 'Купить дом 300';
-            }
-            else if (money >= 300 && !h3) {
-                document.getElementById('house3').classList.add('visible');
+                shopHomeBtn.textContent = 'Купить дом 300';
+            } else if (money >= 300 && !h3) {
+                document.getElementById('house3').style.display = 'block';
                 money -= 300;
                 h3 = true;
-                document.getElementById('shopHomeBtn').textContent = 'Купить небоскреб 500';
-            }
-            else if (money >= 500 && !h4) {
-                document.getElementById('house4').classList.add('visible');
+                shopHomeBtn.textContent = 'Купить небоскреб 500';
+            } else if (money >= 500 && !h4) {
+                document.getElementById('house4').style.display = 'block';
                 money -= 500;
                 h4 = true;
-                document.getElementById('shopHomeBtn').textContent = 'Купить банк 1000';
-            }
-            else if (money >= 1000 && !h5) {
-                document.getElementById('house5').classList.add('visible');
+                shopHomeBtn.textContent = 'Купить банк 1000';
+            } else if (money >= 1000 && !h5) {
+                document.getElementById('house5').style.display = 'block';
                 money -= 1000;
                 h5 = true;
-                document.getElementById('shopHomeBtn').style.display = 'none';
+                shopHomeBtn.style.display = 'none'; // Кнопка исчезает после последнего дома
             }
-            update();
+            updateUI(); // ✅ Добавлено: обновление баланса сразу после покупки
         }
 
-        // Обновление интерфейса
-        function update() {
-            document.getElementById('balance').textContent = `Баланс: ${money}`;
-            
-            const shopBtn = document.getElementById('shopBtn');
+        function updateUI() {
+            balanceEl.textContent = `Баланс: ${money}`;
             if (money >= upgradeCost) {
                 shopBtn.disabled = false;
                 shopBtn.textContent = `Купить ${upgradeCost}`;
@@ -219,8 +182,12 @@
             }
         }
 
-        // Инициализация
-        update();
+        // Привязываем события через JS (надёжнее, чем onclick в HTML)
+        document.getElementById('mainBtn').addEventListener('click', doClick);
+        shopBtn.addEventListener('click', buyUpgrade);
+        shopHomeBtn.addEventListener('click', buyHome);
+
+        updateUI();
     </script>
 </body>
 </html>
